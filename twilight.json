@@ -26,6 +26,15 @@
     ],
     "settings": [
         {
+            "type": "boolean",
+            "format": "switch",
+            "id": "show_announcement_bar",
+            "label": "إظهار شريط الإعلان أعلى الموقع",
+            "icon": "sicon-toggle-off",
+            "value": false,
+            "required": false
+        },
+        {
             "id": "squar_photo_bg_image_size",
             "type": "items",
             "format": "dropdown-list",
