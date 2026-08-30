@@ -1,0 +1,81 @@
+{#
+| Variable   | Type       | Description                                                     |
+|------------|------------|----------------------------------------------------------------|
+| products   | Product[]  | List passed into this partial; we render up to 3 of them.      |
+| product    | Product    | Each item the loop yields — the Salla global product shape:    |
+|            |            |   product.name        string   product title                   |
+|            |            |   product.url         string   absolute store URL of the page  |
+|            |            |   product.image.url   string   merchant media (Salla CDN URL)  |
+|            |            |   product.image.alt   ?string  image alt text                  |
+|            |            |   product.is_on_sale  bool      has a discounted price          |
+|            |            |   product.price       int       regular price                  |
+|            |            |   product.sale_price  int       discounted price               |
+#}
+
+{# `slice(0, 3)` is core Twig (not an invented helper) — it caps the render at 3 items. #}
+<ul class="day3-cards grid grid-cols-1 gap-4 sm:grid-cols-3">
+  {% for product in products|slice(0, 3) %}
+    <li class="day3-card">
+      {#
+        `is_current_url()` is the Salla helper that reports whether the page
+        currently open matches the given link. When this card points at the
+        product page you're already viewing, it earns the "active" class.
+      #}
+      <a
+        href="{{ product.url }}"
+        class="day3-card__link block overflow-hidden rounded-lg border border-gray-200 transition hover:shadow-md {{ is_current_url(product.url) ? 'active' : '' }}"
+      >
+        <figure class="day3-card__media aspect-square bg-gray-50">
+          {#
+            Why `asset` and NOT `cdn` for the fallback image:
+            - The real product photo (product.image.url) is merchant-uploaded
+              media that already lives on Salla's CDN, so it comes through as a
+              ready-to-use URL.
+            - The placeholder ships INSIDE this theme's own build output. The
+              `asset` filter resolves paths against the theme's compiled files,
+              which is exactly where this image lives. `cdn` is for
+              Salla-hosted / pre-defined resources (fonts, saicon, store media),
+              so it would never resolve a theme-local fallback file.
+          #}
+          <img
+            src="{{ product.image.url ?: 'images/placeholder.png'|asset }}"
+            alt="{{ product.image.alt ?: product.name }}"
+            width="400"
+            height="400"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          >
+        </figure>
+
+        <div class="day3-card__body p-3">
+          {% if product.is_on_sale %}
+            {# TODO: localize with trans #}
+            <span class="day3-card__badge inline-block text-xs font-bold text-red-800">Sale</span>
+          {% endif %}
+
+          <h3 class="day3-card__title line-clamp-2 font-medium text-gray-800">{{ product.name }}</h3>
+
+          {#
+            Price goes through the `money` filter so it renders in the store's
+            active currency (symbol, decimal rules, RTL placement) — never a
+            hardcoded "SAR" string.
+          #}
+          <p class="day3-card__price mt-1">
+            {% if product.is_on_sale %}
+              <span class="font-bold text-red-800">{{ product.sale_price|money }}</span>
+              <span class="text-sm text-gray-500 line-through">{{ product.price|money }}</span>
+            {% else %}
+              <span class="font-bold text-gray-800">{{ product.price|money }}</span>
+            {% endif %}
+          </p>
+
+          {# TODO: localize with trans #}
+          <span class="day3-card__cta mt-2 inline-block text-sm text-gray-700">View product</span>
+        </div>
+      </a>
+    </li>
+  {% else %}
+    {# TODO: localize with trans #}
+    <li class="day3-card__empty text-gray-500">No products to show</li>
+  {% endfor %}
+</ul>

@@ -273,6 +273,45 @@
     ],
     "components": [
         {
+            "key": "f1209b92-3d1d-4c65-b1d7-b67e4db0ecee",
+            "title": {
+                "en": "Promo Banner",
+                "ar": "بنر ترويجي"
+            },
+            "icon": "sicon-image",
+            "path": "home.fixed-banner",
+            "image": "https://cdn.salla.network/images/themes/raed/preview-images/images-slider-enhancement.png?v=1.1",
+            "is_default": false,
+            "fields": [
+                {
+                    "type": "string",
+                    "icon": "sicon-image",
+                    "value": null,
+                    "id": "image",
+                    "label": "صورة البنر",
+                    "format": "image",
+                    "required": true,
+                    "placeholder": null,
+                    "description": "* المقاس المناسب للصورة هو 900×600 بكسل"
+                },
+                {
+                    "type": "string",
+                    "icon": "sicon-format-text-alt",
+                    "label": "عنوان رئيسي",
+                    "multilanguage": true,
+                    "id": "title",
+                    "value": null,
+                    "required": false,
+                    "format": "text",
+                    "description": "يظهر فوق صورة البنر بحجم بارز",
+                    "placeholder": "يمكنك إضافة عنوان بارز هنا...",
+                    "hide": false,
+                    "minLength": 0,
+                    "maxLength": 100
+                }
+            ]
+        },
+        {
             "key": "186b3f4f-25cf-4d3c-abca-cef7eed6f0ab",
             "title": {
                 "en": "Enhances Animated Images",
